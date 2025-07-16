@@ -1,0 +1,27 @@
+= Merge Sort
+
+[,cpp]
+----
+void mergesort(vector<int>& nums, int st, int end) {
+        if (st >= end)
+            return;
+        int mid = (st + end) / 2;
+        mergesort(nums, st, mid);
+        mergesort(nums, mid + 1, end);
+        merge(nums, st, end, mid);
+    }
+
+----
+`So,here's the explanation of the merge sort code`
+
+This is the first part of the code . It is the mergesort recursive function . When `st>= end` the recursive call stops .
+It is basically dividing an array in halves and then calls does the same things for the other halves . So it breaks the arry until they are only a single block long.
+
+[,cpp]
+----
+        mergesort(nums, st, mid); // Calling for left half
+        mergesort(nums, mid + 1, end); //calling fro right half
+----
+|===
+0~Start~| 3| 1~Mid~ | 2 | 7~End~
+|===
