@@ -25,3 +25,114 @@ It is basically dividing an array in halves and then calls does the same things 
 |===
 0~Start~| 3| 1~Mid~ | 2 | 7~End~
 |===
+Left part : 
+|===
+0| 3| 1 
+|===
+again this part is sent to follow the same logic , to come sorted and its right part 
+|===
+ 2 | 7
+|===
+too is sent for the mergesort logic to come sorted and when the parts come sorted both parts are merged with this `merge(nums, st, end, mid);` function that merges two sorted parts of an array . The right part of the array is sorted and the left part of the array is sorted too. The function just merges the parts of the function . I will describe how it does that in detail .
+
+[,cpp]
+----
+void merge(vector<int>& nums, int st, int end, int mid) {
+        int array1size = mid - st + 1;
+        int array2size = end - mid;
+        int* arr1 = new int[array1size];
+        int* arr2 = new int[array2size];
+        for (int i = 0; i < array1size; i++) {
+            arr1[i] = nums[i + st];
+        }
+        for (int i = 0; i < array2size; i++) {
+            arr2[i] = nums[i + mid + 1];
+        }
+        int i = 0;
+        int j = 0;
+        int mainindex = st;
+        
+        while (i < array1size && j < array2size) {
+            if (arr1[i] >= arr2[j]) {
+                nums[mainindex] = arr2[j];
+                j++;
+                mainindex++;
+            } else {
+                nums[mainindex] = arr1[i];
+                i++;
+                mainindex++;
+            }
+            if (i >= array1size) {
+                for (int l = j; l < array2size; l++) {
+                    nums[mainindex] = arr2[l];
+                    mainindex++;
+                    
+                }
+                return;
+            }
+            if (j >= array2size) {
+                for (int m = i; m < array1size; m++) {
+                    nums[mainindex] = arr1[m];
+                    mainindex++;
+                    
+                }
+                return;
+            }
+        }
+    }
+----
+The merge function takes a vector which has two sorted parts one from its st index to a random index between its st and end index which is mid index in this case . Now it creates two dynamic arrays (can use vectors too) .
+[,cpp]
+----
+        int array1size = mid - st + 1;
+        int array2size = end - mid;
+        int* arr1 = new int[array1size];
+        int* arr2 = new int[array2size];
+----
+In the `arr1` we copy the `left side` of the sorted part of the nums vector. and we do the same for the `right part` in the `arr2`.
+[,cpp]
+----
+   for (int i = 0; i < array1size; i++) {
+            arr1[i] = nums[i + st];
+        }
+        for (int i = 0; i < array2size; i++) {
+            arr2[i] = nums[i + mid + 1];
+        }
+----
+now we do the merge two sorted arrays logic iteratively with the `i` pointing to the first element of arr1 and `j` pointing to the first element of arr2. if `arr[i]>=arr2[j]` we put this value in the nums vector with respective indexes that can be tracked simply assuming that nums is a blank vector with starting position of `st` , which is done using the `int mainindex = st` to keep track of the where the bigger element is inserted , the else logic is self explanatory . This loop goes on till until i or j get out of the index range of their respective arrays .
+[,cpp]
+----
+    while (i < array1size && j < array2size) {
+            if (arr1[i] >= arr2[j]) {
+                nums[mainindex] = arr2[j];
+                j++;
+                mainindex++;
+            } else {
+                nums[mainindex] = arr1[i];
+                i++;
+                mainindex++;
+            }
+----
+If one goes out first ie one array is smaller than the other then the loop stops and the rest of the other array is copied in the rest of the boxes of nums and its returned.
+[,cpp]
+----
+           if (i >= array1size) {
+                for (int l = j; l < array2size; l++) {
+                    nums[mainindex] = arr2[l];
+                    mainindex++;
+                    
+                }
+                return;
+            }
+            if (j >= array2size) {
+                for (int m = i; m < array1size; m++) {
+                    nums[mainindex] = arr1[m];
+                    mainindex++;
+                    
+                }
+                return;
+            }
+----
+This is how we merge two sorted parts and overwrite the array in the sorted manner. This function is the heart of the mergesort function . The mergesort function calls this
+function recursively for smaller parts of the nums array to theoretically break it into chunks of size 1 . Now as an element itself is already sorted the merge logic is triggered. It merges the two elements then four elements and goes on until the whole nums is sorted in this manner . This logic is more time efficient than bubble , insertion or selection sort that has _O[N^2^]_ where _N_ is the sizeof the part of the array that is given as input.In `Merge Sort` it has _O[NLogN]_ time complexity but with a trade-off of space complexity . It has _O[N]_ space complexity as it creates extra arrays in the memory for temporarily storing parts of the nums in the merge function .
+
