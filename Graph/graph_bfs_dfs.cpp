@@ -37,6 +37,17 @@ void bfs(graph g , int src){
         }
     }
 }
+void dfs(graph s,int src,unordered_map<int,bool>&visited){
+    if(visited[src])return;
+    cout<<src;
+    visited[src]=1;
+    for(auto it : s.adjList[src]){
+        dfs(s,it,visited);
+    }
+
+
+
+}
 int main(){
     int a;
     graph s;
